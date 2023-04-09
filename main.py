@@ -2,36 +2,14 @@ import csv
 from pprint import pprint
 import re
 
-with open("adressbook.csv", mode="w", encoding='utf-8') as w_file:
-    file_writer = csv.writer(w_file, delimiter=",", lineterminator="\r")
-    file_writer.writerow(["lastname", "firstname", "surname", "organization", "position", "phone", "email"])
-
-    file_writer.writerow(["Дядюля", "Екатерина", "Андреевна", "ФНС", "Cоветник отдела нормативного и "
-                                                                     "методологического обеспечения государственной "
-                                                                     "регистрации юридических лиц и индивидуальных "
-                                                                     "предпринимателей Управления регистрации и учета "
-                                                                     "налогоплательщиков", "+7(495)9130468",
-                          "opendata@nalog.ru"])
-
-    file_writer.writerow(["Блитман", "Александр", "Михайлович", "ФНС", "Заместитель отдела методологии взаимодействия "
-                                                                       "с налогоплательщиками по телекоммуникационным "
-                                                                       "каналам связи Управления электронного "
-                                                                       "документооборота из компании ФНС России",
-                          "8(495)9130000 ", "mns10650@nalog.ru"])
-
-    file_writer.writerow(["Коцарёва", "Полина", "Андреевна", "ФНС", "референт Административного департамента",
-                          "+7(495)9833699 ", "Polina.Kotcareva", "@minfin.ru"])
-
-with open("adressbook.csv", encoding='utf-8') as f:
+with open("phonebook_raw.csv", encoding='utf-8') as f:
     rows = csv.reader(f, delimiter=",")
     contacts_list = list(rows)
-    # pprint(contacts_list)
-
+    pprint(contacts_list)
 
 def name_normalization(rows):
     result = [' '.join(employee[0:3]).split(' ')[0:3] + employee[3:7] for employee in rows]
     return result
-
 
 def remove_duplicates(updated_name_list):
     no_duplicates = []
@@ -51,7 +29,6 @@ def remove_duplicates(updated_name_list):
 
 
 def updating_phone_numbers(rows, regular, new):
-    adressbook = []
     pattern = re.compile(regular)
     phonebook = [[pattern.sub(new, string) for string in strings] for strings in rows]
     return phonebook
